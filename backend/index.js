@@ -2,6 +2,9 @@ const express=require("express");
 const app=express()
 const {createTodo,updateTodo}=require("./types")
 const {todo}=require("./db");
+const cors=require("cors")
+
+app.use(cors());
 
 app.use(express.json())
 
@@ -34,6 +37,7 @@ app.get("/todos",async function (req,res){
 
 app.put("/completed",async function (req,res) {
     const updateBody=req.body;
+    console.log(req.body);
     const parseBody=updateTodo.safeParse(updateBody);
     if(!parseBody.success){
         res.status(411).json({
@@ -41,6 +45,8 @@ app.put("/completed",async function (req,res) {
         })
         return;
     }
+    console.log(req.body);
+    console.log(req.body.id);
     await todo.updateOne({
         _id:req.body.id,
     },{
